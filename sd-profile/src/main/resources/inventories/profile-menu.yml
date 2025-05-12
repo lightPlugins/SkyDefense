@@ -1,0 +1,47 @@
+title: 'Player Profile Menu'
+size: 4
+update-intervall: 2
+content:
+  decoration:
+    enable: true
+    item: black_stained_glass_pane
+  navigation:
+    close:
+      slots: [32]
+      use-page-number-as-amount: false
+      item: redstone
+      display-name: '<red>Close Inventory'
+      custom-model-data: 1337
+      lore:
+        - 'Close Inventory'
+    previous-page: { }
+    next-page: { }
+  static:
+    ongoing:
+      slots: [17]
+      item: book
+      display-name: '<red>How can i get more slots ?'
+      lore:
+        - '<gray>By default you have <light_blue>2 <gray>profile slots.'
+        - ''
+        - '<gray>Anyways, if you need <light_blue>more <gray>slots,'
+        - '<gray>you can buy them in our shop.'
+  custom: { }
+  extra-settings:
+    active-slot:
+      item: green_stained_glass_pane
+      display-name: '<green>#profile-name#'
+      lore:
+        - '<gray>This slot is <green>selected'
+    available-slot:
+      item: green_stained_glass_pane
+      display-name: '<green>#profile-name#'
+      lore:
+        - '<gray>This slot is <orange>not in use'
+        - '<gray>Click to select this profile'
+    locked-slot:
+      item: green_stained_glass_pane
+      display-name: '<green>Available Slot'
+      lore:
+        - '<gray>This slot is <red>locked'
+        - '<gray>You need to buy it in our shop'

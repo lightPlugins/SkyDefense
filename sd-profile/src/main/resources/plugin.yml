@@ -1,9 +1,9 @@
 name: ${name}
 author: LightStudios
 version: ${version}
-main: io.lightstudios.skydefense.SDProfile
+main: io.lightstudios.skydefense.profile.SDProfile
 api-version: 1.21
-depend: [ ]
+depend: ["LightCore"]
 softdepend: [ ]
 libraries: [ ]
 commands: { }

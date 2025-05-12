@@ -23,9 +23,10 @@ subprojects {
     apply(plugin = "com.gradleup.shadow")
     apply(plugin = "maven-publish")
     apply(plugin = "io.freefair.lombok")
+    apply(plugin = "io.papermc.paperweight.userdev")
 
-    if (name != "sd-common") {
-        apply(plugin = "io.papermc.paperweight.userdev")
+    dependencies {
+        compileOnly(files("C:/libs/LightCore-1.0.0.jar"))
     }
 
     tasks {
