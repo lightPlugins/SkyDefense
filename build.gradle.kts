@@ -7,7 +7,7 @@ plugins {
 }
 
 allprojects {
-    group = "io.lightstudios.farmingtycon"
+    group = "io.lightstudios.skydefense"
     version = "1.0.0"
 
     repositories {
