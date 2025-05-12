@@ -1,4 +1,4 @@
-package io.lightstudios.farmingtycon;
+package io.lightstudios.skydefense;
 
 import org.bukkit.plugin.java.JavaPlugin;
 

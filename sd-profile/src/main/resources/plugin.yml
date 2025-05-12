@@ -1,7 +1,7 @@
 name: ${name}
 author: LightStudios
 version: ${version}
-main: io.lightstudios.farmingtycon.FTProfile
+main: io.lightstudios.skydefense.FTProfile
 api-version: 1.21
 depend: [ ]
 softdepend: [ ]

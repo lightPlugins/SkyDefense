@@ -1,9 +1,0 @@
-name: ${name}
-author: LightStudios
-version: ${version}
-main: io.lightstudios.farmingtycon.FTCore
-api-version: 1.21
-depend: [ ]
-softdepend: [ ]
-libraries: [ ]
-commands: { }

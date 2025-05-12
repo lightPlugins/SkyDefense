@@ -1,17 +1,12 @@
 
 val pluginVersion = "1.0.0"
-val pluginName = "ft-core"
-val pluginNamePackage = "ftcore"
-val pluginMain = "FTCore"
-val packageName = "io.lightstudios.farmingtycon.$pluginNamePackage.$pluginMain"
+val pluginName = "SkyDefense-Profile"
 
 plugins {
     `java-library`
 }
 
 dependencies {
-    api(project(":ft-profile"))
-    api(project(":ft-common"))
     paperweight.paperDevBundle("1.21.5-R0.1-SNAPSHOT")
 }
 
@@ -22,7 +17,6 @@ tasks {
                 expand(
                     "name" to pluginName,
                     "version" to pluginVersion,
-                    "main" to packageName,
                 )
 
             }
