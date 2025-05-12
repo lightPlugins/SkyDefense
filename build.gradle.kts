@@ -24,7 +24,7 @@ subprojects {
     apply(plugin = "maven-publish")
     apply(plugin = "io.freefair.lombok")
 
-    if (name != "ft-common") {
+    if (name != "sd-common") {
         apply(plugin = "io.papermc.paperweight.userdev")
     }
 

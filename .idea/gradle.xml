@@ -9,9 +9,7 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
-            <option value="$PROJECT_DIR$/ft-common" />
-            <option value="$PROJECT_DIR$/ft-core" />
-            <option value="$PROJECT_DIR$/ft-profile" />
+            <option value="$PROJECT_DIR$/sd-profile" />
           </set>
         </option>
         <option name="resolveExternalAnnotations" value="true" />
