@@ -3,76 +3,110 @@ package io.lightstudios.skydefense.profile.inventories;
 import io.lightstudios.core.inventory.LightInventory;
 import io.lightstudios.core.inventory.model.InventoryData;
 import io.lightstudios.core.inventory.model.MenuItem;
+import io.lightstudios.core.util.LightTimers;
+import io.lightstudios.skydefense.common.models.profile.PlayerProfile;
 import io.lightstudios.skydefense.profile.SDProfile;
+import io.lightstudios.skydefense.profile.api.SDProfileAPI;
 import net.kyori.adventure.text.Component;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class ProfileMenuInv {
 
-    private LightInventory editMenu(Player player) {
+    private final List<UUID> isOnCooldown = new ArrayList<>();
+
+    public LightInventory editMenu(Player player) {
         LightInventory inv = getInventory();
+        SDProfileAPI api = SDProfile.instance.getSdProfileAPI();
+        UUID playerUUID = player.getUniqueId();
 
-        Material lockedMaterial = Material.valueOf(getMainMenu().getExtraSettings().getString("locked-slot.item", "DIAMOND").toUpperCase());
-        Material activeMaterial = Material.valueOf(getMainMenu().getExtraSettings().getString("active-slot.item", "DIAMOND").toUpperCase());
-        Material availableMaterial = Material.valueOf(getMainMenu().getExtraSettings().getString("available-slot.item", "DIAMOND").toUpperCase());
+        for (int i = 0; i < 5; i++) {
+            final int index = i;
+            List<PlayerProfile> profiles = api.getPlayerProfiles().get(playerUUID);
+            boolean isLocked = index >= 2; // Profile 3-5 sind gesperrt by default
 
-        List<String> lockedLore = getMainMenu().getExtraSettings().getStringList("locked-slot.lore");
-        List<String> activeLore = getMainMenu().getExtraSettings().getStringList("active-slot.lore");
-        List<String> availableLore = getMainMenu().getExtraSettings().getStringList("available-slot.lore");
+            if(player.hasPermission("sdprofile.premium")) {
+                // Premium-Berechtigung
+                isLocked = false;
+            }
 
-        String lockedName = getMainMenu().getExtraSettings().getString("locked-slot.display-name", "ERROR");
-        String activeName = getMainMenu().getExtraSettings().getString("active-slot.display-name", "ERROR");
-        String availableName = getMainMenu().getExtraSettings().getString("available-slot.display-name", "ERROR");
+            boolean isActive;
 
-        ItemStack lockedItem = new ItemStack(lockedMaterial);
-        ItemStack activeItem = new ItemStack(activeMaterial);
-        ItemStack availableItem = new ItemStack(availableMaterial);
+            if (profiles != null && index < profiles.size()) {
+                isActive = profiles.get(index).isActive();
+            } else {
+                isActive = false;
+            }
 
-        ItemMeta lockedMeta = lockedItem.getItemMeta();
-        ItemMeta activeMeta = activeItem.getItemMeta();
-        ItemMeta availableMeta = availableItem.getItemMeta();
+            boolean finalIsLocked = isLocked;
+            MenuItem item = new MenuItem(getProfileItem(isLocked, isActive), (clickEvent, clickedItem) -> {
+                if (finalIsLocked) {
+                    player.sendMessage("Dieses Profil ist gesperrt. Kaufe Premium, um es zu entsperren.");
+                    openInventory(player);
+                } else {
+                    if (profiles != null && index < profiles.size()) {
+                        if(!isActive) {
 
-        lockedMeta.displayName(Component.text(lockedName));
-        activeMeta.displayName(Component.text(activeName));
-        availableMeta.displayName(Component.text(availableName));
+                            if(isOnCooldown.contains(playerUUID)) {
+                                player.sendMessage("Du kannst dein Profil erst wieder in 5 Sekunden wechseln.");
+                                return;
+                            }
 
-        lockedMeta.lore(lockedLore.stream().map(Component::text).toList());
-        activeMeta.lore(activeLore.stream().map(Component::text).toList());
-        availableMeta.lore(availableLore.stream().map(Component::text).toList());
+                            api.switchProfile(playerUUID, profiles.get(index).getProfileUUID());
+                            isOnCooldown.add(playerUUID);
 
-        lockedItem.setItemMeta(lockedMeta);
-        activeItem.setItemMeta(activeMeta);
-        availableItem.setItemMeta(availableMeta);
+                            LightTimers.doSync(task -> {
+                                if(isOnCooldown.contains(playerUUID)) {
+                                    isOnCooldown.remove(playerUUID);
+                                    task.cancel();
+                                    return;
+                                }
+                                task.cancel();
+                            }, 20 * 5);
 
-        MenuItem lockedItemMenu = new MenuItem(lockedItem, (clickEvent, clickedItem) -> {
-            // Handle locked item click
-            player.sendMessage("This item is locked.");
-        });
+                        } else {
+                            player.sendMessage("Dieses profil ist bereits aktiv.");
+                            return;
+                        }
 
-        MenuItem activeItemMenu = new MenuItem(activeItem, (clickEvent, clickedItem) -> {
-            // Handle active item click
-            player.sendMessage("This item is active.");
-        });
+                    } else {
+                        player.sendMessage("Ungültiges Profil. Bitte versuche es erneut.");
+                    }
+                    player.sendMessage("Du hast zu Profil " + (index + 1) + " gewechselt.");
+                    openInventory(player);
+                }
+            });
 
-        MenuItem availableItemMenu = new MenuItem(availableItem, (clickEvent, clickedItem) -> {
-            // Handle available item click
-            player.sendMessage("This item is available.");
-        });
-
-        inv.setItem(1, 12, lockedItemMenu);
-        inv.setItem(1, 13, lockedItemMenu);
-        inv.setItem(1, 14, lockedItemMenu);
-        inv.setItem(1, 10, activeItemMenu);
-        inv.setItem(1, 11, availableItemMenu);
-
-
+            inv.setItem(1, 10 + index, item);
+        }
         return inv;
+    }
+
+    private ItemStack getProfileItem(boolean isLocked, boolean isActive) {
+        ItemStack item = new ItemStack(isLocked ? Material.BARRIER : Material.DIAMOND);
+        ItemMeta meta = item.getItemMeta();
+
+        if (meta != null) {
+            if (!isLocked && isActive) {
+                meta.addEnchant(Enchantment.EFFICIENCY, 1, true); // Gloweffekt hinzufügen
+                meta.addItemFlags(ItemFlag.HIDE_ENCHANTS); // Verzauberungseffekt verstecken
+            }
+            meta.displayName(Component.text(isLocked ? "Gesperrt" : "Verfügbar")
+                    .append(Component.text(" - "))
+                    .append(!isLocked && isActive ? Component.text("Aktiv") : Component.text("Inaktiv")));
+            item.setItemMeta(meta);
+        }
+
+        return item;
     }
 
     private InventoryData getMainMenu() {

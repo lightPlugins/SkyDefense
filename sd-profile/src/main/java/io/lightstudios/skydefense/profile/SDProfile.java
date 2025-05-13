@@ -5,6 +5,7 @@ import io.lightstudios.core.inventory.model.InventoryData;
 import io.lightstudios.core.util.ConsolePrinter;
 import io.lightstudios.core.util.files.FileManager;
 import io.lightstudios.core.util.files.MultiFileManager;
+import io.lightstudios.skydefense.profile.api.SDProfileAPI;
 import io.lightstudios.skydefense.profile.commands.OpenProfileMenu;
 import io.lightstudios.skydefense.profile.commands.ReloadCommand;
 import io.lightstudios.skydefense.profile.configs.MessagesConfig;
@@ -30,6 +31,8 @@ public class SDProfile extends JavaPlugin {
     public static SDProfile instance;
     public ConsolePrinter consolePrinter;
 
+    public SDProfileAPI sdProfileAPI;
+
     public FileManager settings;
     public SettingsConfig settingsConfig;
 
@@ -44,6 +47,7 @@ public class SDProfile extends JavaPlugin {
         instance = this;
         this.consolePrinter = new ConsolePrinter("§7[§rSky§bDefense§7] §r");
         loadDefaults();
+        this.sdProfileAPI = new SDProfileAPI();
     }
 
     @Override

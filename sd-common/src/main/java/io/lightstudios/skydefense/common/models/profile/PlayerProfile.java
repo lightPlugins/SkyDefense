@@ -12,5 +12,6 @@ public class PlayerProfile {
     private UUID playerUUID;
     private UUID profileUUID;
     private String profileName;
+    private boolean active;
 
 }
