@@ -8,7 +8,8 @@ public enum ProfilePerms {
     PROFILE_OPEN("skydefense.commands.profile.open"),
     PROFILE_RELOAD("skydefense.commands.profile.reload"),
     PROFILE_DELETE("skydefense.profile.delete"),
-    PROFILE_CREATE("skydefense.profile.create")
+    PROFILE_CREATE("skydefense.profile.create"),
+    PROFILE_INVITE("skydefense.profile.command.invite"),
     ;
 
     private final String permission;

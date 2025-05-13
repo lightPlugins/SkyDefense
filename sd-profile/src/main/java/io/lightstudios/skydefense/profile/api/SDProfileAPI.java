@@ -11,7 +11,7 @@ import java.util.UUID;
 @Getter
 public class SDProfileAPI {
 
-    private Map<UUID, List<PlayerProfile>> playerProfiles = new HashMap<>();
+    private final Map<UUID, List<PlayerProfile>> playerProfiles = new HashMap<>();
 
 
     public void switchProfile(UUID playerUUID, UUID targetProfileUUID) {

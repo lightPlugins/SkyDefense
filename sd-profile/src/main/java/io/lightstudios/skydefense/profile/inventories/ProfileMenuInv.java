@@ -8,7 +8,6 @@ import io.lightstudios.skydefense.common.models.profile.PlayerProfile;
 import io.lightstudios.skydefense.profile.SDProfile;
 import io.lightstudios.skydefense.profile.api.SDProfileAPI;
 import net.kyori.adventure.text.Component;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -32,55 +31,38 @@ public class ProfileMenuInv {
         for (int i = 0; i < 5; i++) {
             final int index = i;
             List<PlayerProfile> profiles = api.getPlayerProfiles().get(playerUUID);
-            boolean isLocked = index >= 2; // Profile 3-5 sind gesperrt by default
+            boolean isLocked = profiles.get(index).isLocked(); // Profile 3-5 sind gesperrt by default
+            boolean isActive = profiles.get(index).isActive();
 
-            if(player.hasPermission("sdprofile.premium")) {
-                // Premium-Berechtigung
-                isLocked = false;
-            }
-
-            boolean isActive;
-
-            if (profiles != null && index < profiles.size()) {
-                isActive = profiles.get(index).isActive();
-            } else {
-                isActive = false;
-            }
-
-            boolean finalIsLocked = isLocked;
             MenuItem item = new MenuItem(getProfileItem(isLocked, isActive), (clickEvent, clickedItem) -> {
-                if (finalIsLocked) {
+                if (isLocked) {
                     player.sendMessage("Dieses Profil ist gesperrt. Kaufe Premium, um es zu entsperren.");
                     openInventory(player);
                 } else {
-                    if (profiles != null && index < profiles.size()) {
-                        if(!isActive) {
+                    if(!isActive) {
 
-                            if(isOnCooldown.contains(playerUUID)) {
-                                player.sendMessage("Du kannst dein Profil erst wieder in 5 Sekunden wechseln.");
-                                return;
-                            }
-
-                            api.switchProfile(playerUUID, profiles.get(index).getProfileUUID());
-                            isOnCooldown.add(playerUUID);
-
-                            LightTimers.doSync(task -> {
-                                if(isOnCooldown.contains(playerUUID)) {
-                                    isOnCooldown.remove(playerUUID);
-                                    task.cancel();
-                                    return;
-                                }
-                                task.cancel();
-                            }, 20 * 5);
-
-                        } else {
-                            player.sendMessage("Dieses profil ist bereits aktiv.");
+                        if(isOnCooldown.contains(playerUUID)) {
+                            player.sendMessage("Du kannst dein Profil erst wieder in 5 Sekunden wechseln.");
                             return;
                         }
 
+                        api.switchProfile(playerUUID, profiles.get(index).getProfileUUID());
+                        isOnCooldown.add(playerUUID);
+
+                        LightTimers.doSync(task -> {
+                            if(isOnCooldown.contains(playerUUID)) {
+                                isOnCooldown.remove(playerUUID);
+                                task.cancel();
+                                return;
+                            }
+                            task.cancel();
+                        }, 20 * 5);
+
                     } else {
-                        player.sendMessage("Ungültiges Profil. Bitte versuche es erneut.");
+                        player.sendMessage("Dieses profil ist bereits aktiv.");
+                        return;
                     }
+
                     player.sendMessage("Du hast zu Profil " + (index + 1) + " gewechselt.");
                     openInventory(player);
                 }
