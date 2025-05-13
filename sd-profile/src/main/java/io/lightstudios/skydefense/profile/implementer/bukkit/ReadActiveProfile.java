@@ -24,6 +24,7 @@ public class ReadActiveProfile implements Listener {
         // wenn nicht, erstelle Standardprofile mit init values.
         // Der Spieler muss IMMER 5 Profile haben, auch wenn er sie nicht gekauft hat.
         // Erst mit einem Premium rang hat er Zugriff auf die Profile 3-5.
+        // Es darf IMMER nur ein Profil aktiv sein.
         if (!api.getPlayerProfiles().containsKey(playerUUID)) {
             // Standardprofile erstellen
             PlayerProfile profile1 = new PlayerProfile();

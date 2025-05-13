@@ -34,7 +34,7 @@ public class ProfileMenuInv {
             boolean isLocked = profiles.get(index).isLocked(); // Profile 3-5 sind gesperrt by default
             boolean isActive = profiles.get(index).isActive();
 
-            MenuItem item = new MenuItem(getProfileItem(isLocked, isActive), (clickEvent, clickedItem) -> {
+            MenuItem item = new MenuItem(getProfileItem(profiles.get(index), isLocked, isActive), (clickEvent, clickedItem) -> {
                 if (isLocked) {
                     player.sendMessage("Dieses Profil ist gesperrt. Kaufe Premium, um es zu entsperren.");
                     openInventory(player);
@@ -73,7 +73,7 @@ public class ProfileMenuInv {
         return inv;
     }
 
-    private ItemStack getProfileItem(boolean isLocked, boolean isActive) {
+    private ItemStack getProfileItem(PlayerProfile profile, boolean isLocked, boolean isActive) {
         ItemStack item = new ItemStack(isLocked ? Material.BARRIER : Material.DIAMOND);
         ItemMeta meta = item.getItemMeta();
 
@@ -83,7 +83,7 @@ public class ProfileMenuInv {
                 meta.addItemFlags(ItemFlag.HIDE_ENCHANTS); // Verzauberungseffekt verstecken
             }
             meta.displayName(Component.text(isLocked ? "Gesperrt" : "Verfügbar")
-                    .append(Component.text(" - "))
+                    .append(Component.text(" - " + profile.getProfileName() + " - "))
                     .append(!isLocked && isActive ? Component.text("Aktiv") : Component.text("Inaktiv")));
             item.setItemMeta(meta);
         }
