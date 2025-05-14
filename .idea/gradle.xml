@@ -10,6 +10,7 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/sd-common" />
+            <option value="$PROJECT_DIR$/sd-hunt" />
             <option value="$PROJECT_DIR$/sd-profile" />
           </set>
         </option>
