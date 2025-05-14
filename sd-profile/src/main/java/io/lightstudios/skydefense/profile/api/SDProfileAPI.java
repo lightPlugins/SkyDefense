@@ -20,7 +20,7 @@ public class SDProfileAPI {
         if (profiles == null) return;
 
         for (PlayerProfile profile : profiles) {
-            // Nur das Zielprofil aktivieren
+            // Nur das Zielprofil aktivieren, nur ein Profil kann aktiv sein
             profile.setActive(profile.getProfileUUID().equals(targetProfileUUID));
         }
     }
