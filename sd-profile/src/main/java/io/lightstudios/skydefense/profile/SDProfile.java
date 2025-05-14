@@ -52,11 +52,10 @@ public class SDProfile extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        getConsolePrinter().printInfo("Enabling SkyDefense Profile Module ...");
 
         registerCommands();
         registerEvents();
-
-        getConsolePrinter().printInfo("Enabling SkyDefense Profile Module ...");
 
     }
 

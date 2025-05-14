@@ -1,7 +1,7 @@
-package io.lightstudios.skydefense.profile.configs;
+package io.lightstudios.skydefense.hunt.configs;
 
 import io.lightstudios.core.util.files.FileManager;
-import io.lightstudios.skydefense.profile.SDProfile;
+import io.lightstudios.skydefense.hunt.SDHunt;
 import org.bukkit.configuration.file.FileConfiguration;
 
 import java.util.List;
@@ -14,7 +14,7 @@ public class SettingsConfig {
         this.config = config.getConfig();
 
         if(this.config == null) {
-            SDProfile.instance.getConsolePrinter().printError(List.of(
+            SDHunt.instance.getConsolePrinter().printError(List.of(
                     "Failed to load default settings.yml",
                     "Please check if the file exists and try again.",
                     "Otherwise, please contact the developer."

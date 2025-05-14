@@ -3,7 +3,7 @@ author: LightStudios
 version: ${version}
 main: io.lightstudios.skydefense.profile.SDProfile
 api-version: 1.21
-depend: ["LightCore"]
+depend: ["LightCore", "Skydefense-Profile"]
 softdepend: [ ]
 libraries: [ ]
 commands: { }

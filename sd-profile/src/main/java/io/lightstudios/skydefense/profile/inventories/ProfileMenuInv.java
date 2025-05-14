@@ -7,6 +7,7 @@ import io.lightstudios.core.util.LightTimers;
 import io.lightstudios.skydefense.common.models.profile.PlayerProfile;
 import io.lightstudios.skydefense.profile.SDProfile;
 import io.lightstudios.skydefense.profile.api.SDProfileAPI;
+import io.lightstudios.skydefense.profile.implementer.custom.SwitchProfileEvent;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -27,6 +28,16 @@ public class ProfileMenuInv {
         LightInventory inv = getInventory();
         SDProfileAPI api = SDProfile.instance.getSdProfileAPI();
         UUID playerUUID = player.getUniqueId();
+
+        PlayerProfile currentProfile = api.getActiveProfile(playerUUID);
+
+        if(currentProfile == null) {
+            SDProfile.instance.getConsolePrinter().printError(List.of(
+                    "Could not find active profile for player " + player.getName() + ".",
+                    "Please make sure the player has a profile assigned."
+            ));
+            return null;
+        }
 
         for (int i = 0; i < 5; i++) {
             final int index = i;
