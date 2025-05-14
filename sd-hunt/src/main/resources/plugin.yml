@@ -3,7 +3,7 @@ author: LightStudios
 version: ${version}
 main: io.lightstudios.skydefense.hunt.SDHunt
 api-version: 1.21
-depend: ["LightCore"]
+depend: ["LightCore", "SkyDefense-Profile"]
 softdepend: [ ]
 libraries: [ ]
 commands: { }

@@ -7,6 +7,8 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.UUID;
+
 public class SwitchProfileEvent extends Event implements Cancellable {
 
     private static final HandlerList HANDLERS = new HandlerList();
@@ -16,12 +18,16 @@ public class SwitchProfileEvent extends Event implements Cancellable {
     private final PlayerProfile previousProfile;
     @Getter
     private final PlayerProfile newProfile;
+    @Getter
+    private final UUID playerUUID;
 
     public SwitchProfileEvent(
             PlayerProfile previousProfile,
-            PlayerProfile newProfile) {
+            PlayerProfile newProfile,
+            UUID playerUUID) {
         this.previousProfile = previousProfile;
         this.newProfile = newProfile;
+        this.playerUUID = playerUUID;
     }
 
     @Override
@@ -37,6 +43,10 @@ public class SwitchProfileEvent extends Event implements Cancellable {
     @Override
     @NotNull
     public HandlerList getHandlers() {
+        return HANDLERS;
+    }
+
+    public static HandlerList getHandlerList() {
         return HANDLERS;
     }
 }

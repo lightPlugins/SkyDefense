@@ -28,7 +28,7 @@ public class SDProfileAPI {
             profile.setActive(profile.getProfileUUID().equals(targetProfileUUID));
         }
 
-        SwitchProfileEvent event = new SwitchProfileEvent(previousProfile, getActiveProfile(targetProfileUUID));
+        SwitchProfileEvent event = new SwitchProfileEvent(previousProfile, getActiveProfile(targetProfileUUID), playerUUID);
 
         LightTimers.doSync(task -> {
             if(!event.isCancelled()) {

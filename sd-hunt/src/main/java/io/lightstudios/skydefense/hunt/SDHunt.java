@@ -4,9 +4,12 @@ import io.lightstudios.core.util.ConsolePrinter;
 import io.lightstudios.core.util.files.FileManager;
 import io.lightstudios.skydefense.hunt.configs.MessagesConfig;
 import io.lightstudios.skydefense.hunt.configs.SettingsConfig;
+import io.lightstudios.skydefense.hunt.implementer.bukkit.CheckForProfileSwitch;
 import io.lightstudios.skydefense.profile.SDProfile;
 import io.lightstudios.skydefense.profile.api.SDProfileAPI;
 import lombok.Getter;
+import org.bukkit.event.Listener;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.List;
@@ -88,7 +91,15 @@ public class SDHunt extends JavaPlugin {
 
     }
 
-    public void registerEvents() {
+    private void registerEvents() {
+        // collect all provided listeners given from profiles
+        List<Listener> listeners = List.of(new CheckForProfileSwitch());
+
+        PluginManager pluginManager = getServer().getPluginManager();
+
+        for (Listener listener : listeners) {
+            pluginManager.registerEvents(listener, this);
+        }
     }
 
     public void registerCommands() {
