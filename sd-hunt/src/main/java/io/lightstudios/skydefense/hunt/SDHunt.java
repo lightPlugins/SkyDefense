@@ -2,6 +2,7 @@ package io.lightstudios.skydefense.hunt;
 
 import io.lightstudios.core.util.ConsolePrinter;
 import io.lightstudios.core.util.files.FileManager;
+import io.lightstudios.core.util.files.MultiFileManager;
 import io.lightstudios.skydefense.hunt.configs.MessagesConfig;
 import io.lightstudios.skydefense.hunt.configs.SettingsConfig;
 import io.lightstudios.skydefense.hunt.implementer.bukkit.CheckForProfileSwitch;
@@ -12,6 +13,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.IOException;
 import java.util.List;
 
 @Getter
@@ -26,6 +28,8 @@ public class SDHunt extends JavaPlugin {
     public FileManager messages;
     private SettingsConfig settingsConfig;
     private MessagesConfig messagesConfig;
+
+    private MultiFileManager stageFiles;
 
     @Override
     public void onLoad() {
@@ -69,6 +73,19 @@ public class SDHunt extends JavaPlugin {
     private void readOrWriteConfigs() {
         this.settings = new FileManager(this, "settings.yml", true);
         this.settingsConfig = new SettingsConfig(settings);
+
+        try {
+            getLogger().info("Loading stage files ...");
+            this.stageFiles = new MultiFileManager("plugins/" + getName() + "/stages/");
+        } catch (IOException e) {
+            getConsolePrinter().printError(List.of(
+                    "Could not load stage files.",
+                    "Please make sure the file is not corrupted.",
+                    "Error: " + e.getMessage()
+            ));
+        }
+
+        getConsolePrinter().printInfo("Loaded §b" + stageFiles.getYamlFiles().size() + "§r stage file(s).");
 
     }
 
